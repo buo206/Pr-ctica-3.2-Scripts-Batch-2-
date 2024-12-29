@@ -1,0 +1,54 @@
+@echo off 
+setlocal enabledelayedexpansion
+
+rem Comprobar si se han pasado dos parámetros 
+if "%1"=="" ( 
+  echo Error: Debes proporcionar una dirección IPv4. 
+  exit /b 1 
+)
+if "%2"=="" ( 
+  echo Error: Debes proporcionar una máscara de subred. 
+  exit /b 1 
+)
+
+rem Asignar los parámetros a variables 
+set ip=%1 
+set mask=%2
+
+rem Convertir la IP y la máscara de subred a binario 
+for /f "tokens=1-4 delims=." %%a in ("%ip%") do ( 
+  set /a oct1=%%a 
+  set /a oct2=%%b 
+  set /a oct3=%%c 
+  set /a oct4=%%d 
+)
+
+for /f "tokens=1-4 delims=." %%a in ("%mask%") do ( 
+  set /a mask1=%%a 
+  set /a mask2=%%b 
+  set /a mask3=%%c 
+  set /a mask4=%%d 
+)
+
+rem Calcular la dirección de red 
+set /a net1=oct1 & mask1 
+set /a net2=oct2 & mask2 
+set /a net3=oct3 & mask3 
+set /a net4=oct4 & mask4
+
+rem Calcular la dirección de broadcast 
+set /a bcast1=oct1 | ~mask1 & 255 
+set /a bcast2=oct2 | ~mask2 & 255 
+set /a bcast3=oct3 | ~mask3 & 255 
+set /a bcast4=oct4 | ~mask4 & 255
+
+rem Calcular el número de hosts 
+set /a hosts=(~mask1 & 255) + (~mask2 & 255) + (~mask3 & 255) + (~mask4 & 255) - 1
+
+rem Mostrar resultados 
+echo Dirección de red: %net1%.%net2%.%net3%.%net4% 
+echo Número de hosts: %hosts% 
+echo Dirección de broadcast: %bcast1%.%bcast2%.%bcast3%.%bcast4%
+
+endlocal 
+pause
