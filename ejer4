@@ -1,0 +1,34 @@
+@echo off 
+setlocal enabledelayedexpansion
+
+rem Comprobar si se han pasado dos parámetros 
+if "%1"=="" ( 
+  echo Error: Debes proporcionar el nombre de un archivo. 
+  exit /b 1 
+) 
+if "%2"=="" ( 
+  echo Error: Debes proporcionar la palabra a contar. 
+  exit /b 1 
+)
+
+rem Asignar los parámetros a variables 
+set archivo=%1 
+set palabra=%2 
+set count=0
+
+rem Leer el archivo línea por línea 
+for /f "tokens=*" %%a in (%archivo%) do (
+  set linea=%%a 
+  rem Contar las ocurrencias de la palabra en la línea 
+  for %%b in (!linea!) do ( 
+    if "%%b"=="%palabra%" ( 
+      set /a count+=1 
+    ) 
+  ) 
+)
+
+rem Mostrar el resultado 
+echo La palabra "%palabra%" aparece %count% veces en el archivo "%archivo%".
+
+endlocal 
+pause
