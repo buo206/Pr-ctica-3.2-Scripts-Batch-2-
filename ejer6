@@ -1,0 +1,111 @@
+@echo off 
+setlocal enabledelayedexpansion
+
+:menu 
+cls 
+echo ============================================ 
+echo        Menu de Gestion de Servicios 
+echo ============================================ 
+echo 1. Listar servicios disponibles 
+echo 2. Listar servicios activos 
+echo 3. Iniciar un servicio 
+echo 4. Pausar un servicio 
+echo 5. Reanudar un servicio 
+echo 6. Deshabilitar un servicio 
+echo 7. Borrar un servicio 
+echo 8. Salir 
+echo ============================================ 
+set /p choice=Elige una opcion (1-8):
+
+if "%choice%"=="1" goto listar_servicios 
+if "%choice%"=="2" goto listar_activos 
+if "%choice%"=="3" goto iniciar_servicio 
+if "%choice%"=="4" goto pausar_servicio 
+if "%choice%"=="5" goto reanudar_servicio 
+if "%choice%"=="6" goto deshabilitar_servicio 
+if "%choice%"=="7" goto borrar_servicio 
+if "%choice%"=="8" goto end 
+goto menu
+
+:listar_servicios 
+echo Listando todos los servicios disponibles... 
+sc query state= all 
+pause 
+goto menu
+
+:listar_activos 
+echo Listando todos los servicios activos... 
+sc query state= running 
+pause 
+goto menu
+
+:iniciar_servicio 
+set /p servicio=Introduce el nombre del servicio a iniciar: 
+echo Iniciando el servicio %servicio%... 
+sc start %servicio% 
+if errorlevel 1 ( 
+  echo Error: No se pudo iniciar el servicio %servicio%. 
+) else ( 
+  echo El servicio %servicio% se ha iniciado correctamente. 
+) 
+pause 
+goto menu
+
+:pausar_servicio 
+set /p servicio=Introduce el nombre del servicio a pausar: 
+echo Pausando el servicio %servicio%... sc pause %servicio% 
+if errorlevel 1 ( 
+  echo Error: No se pudo pausar el servicio %servicio%. 
+) else ( 
+  echo El servicio %servicio% se ha pausado correctamente. 
+) 
+pause 
+goto menu
+
+:reanudar_servicio 
+set /p servicio=Introduce el nombre del servicio a reanudar: 
+echo Reanudando el servicio %servicio%... 
+sc continue %servicio% 
+if errorlevel 1 ( 
+  echo Error: No se pudo reanudar el servicio %servicio%. 
+) else (
+  echo El servicio %servicio% se ha reanudado correctamente. 
+) 
+pause 
+goto menu
+
+:deshabilitar_servicio 
+set /p servicio=Introduce el nombre del servicio a deshabilitar: 
+echo Deshabilitando el servicio %servicio%... 
+sc config %servicio% start= disabled 
+if errorlevel 1 ( 
+  echo Error: No se pudo deshabilitar el servicio %servicio%. 
+) else ( 
+  echo El servicio %servicio% se ha deshabilitado correctamente. 
+) 
+pause 
+goto menu
+
+:borrar_servicio 
+set /p servicio=Introduce el nombre del servicio a borrar: 
+echo Deteniendo el servicio %servicio%... 
+sc stop %servicio% 
+if errorlevel 1 ( 
+  echo Error: No se pudo detener el servicio %servicio%. 
+) else ( 
+  echo El servicio %servicio% se ha detenido correctamente. 
+  echo Borrando el servicio %servicio%... 
+  sc delete %servicio% 
+  if errorlevel 1 ( 
+    echo Error: No se pudo borrar el servicio %servicio%. 
+  ) else ( 
+    echo El servicio %servicio% se ha borrado correctamente. 
+  ) 
+) 
+pause 
+goto menu
+
+:end 
+echo Saliendo del menu de gestion de servicios. 
+endlocal 
+exit
