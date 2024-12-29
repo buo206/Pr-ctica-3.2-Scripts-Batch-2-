@@ -1,0 +1,85 @@
+@echo off 
+setlocal enabledelayedexpansion
+
+:menu 
+cls 
+echo ============================================ 
+echo         Menu de Gestion de Usuarios 
+echo ============================================ 
+echo 1. Listar usuarios locales 
+echo 2. Crear un usuario local 
+echo 3. Borrar un usuario local 
+echo 4. Activar un usuario local 
+echo 5. Desactivar un usuario local 
+echo 6. Salir 
+echo ============================================ 
+set /p choice=Elige una opcion (1-6):
+
+if "%choice%"=="1" goto listar_usuarios 
+if "%choice%"=="2" goto crear_usuario 
+if "%choice%"=="3" goto borrar_usuario 
+if "%choice%"=="4" goto activar_usuario 
+if "%choice%"=="5" goto desactivar_usuario 
+if "%choice%"=="6" goto end 
+goto menu
+
+:listar_usuarios 
+echo Listando todos los usuarios locales... 
+net user 
+pause 
+goto menu
+
+:crear_usuario 
+set /p usuario=Introduce el nombre del nuevo usuario: 
+set /p "password=Introduce la contrasena del nuevo usuario: " <nul 
+echo. 
+echo Creando el usuario %usuario%... 
+net user %usuario% %password% /add 
+if errorlevel 1 ( 
+  echo Error: No se pudo crear el usuario %usuario%. 
+) else (
+  echo El usuario %usuario% se ha creado correctamente. 
+) 
+pause 
+goto menu
+
+:borrar_usuario 
+set /p usuario=Introduce el nombre del usuario a borrar: 
+echo Borrando el usuario %usuario%... 
+net user %usuario% /delete 
+if errorlevel 1 ( 
+  echo Error: No se pudo borrar el usuario %usuario%. 
+) else ( 
+  echo El usuario %usuario% se ha borrado correctamente. 
+) 
+pause 
+goto menu
+
+:activar_usuario 
+set /p usuario=Introduce el nombre del usuario a activar: 
+echo Activando el usuario %usuario%... 
+net user %usuario% /active:yes 
+if errorlevel 1 ( 
+  echo Error: No se pudo activar el usuario %usuario%. 
+) else ( 
+  echo El usuario %usuario% se ha activado correctamente. 
+) 
+pause 
+goto menu
+
+:desactivar_usuario 
+set /p usuario=Introduce el nombre del usuario a desactivar: 
+echo Desactivando el usuario %usuario%... 
+net user %usuario% /active:no 
+if errorlevel 1 ( 
+  echo Error: No se pudo desactivar el usuario %usuario%. 
+) else ( 
+  echo El usuario %usuario% se ha desactivado correctamente. 
+) 
+pause 
+goto menuç
+
+:end 
+echo Saliendo del menu de gestion de usuarios. 
+endlocal 
+exit
