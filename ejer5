@@ -1,0 +1,51 @@
+@echo off 
+setlocal enabledelayedexpansion
+
+:menu 
+cls 
+echo ============================================ 
+echo       Menu de Diagnostico de Windows 
+echo ============================================ 
+echo 1. Verificar la integridad del sistema (SFC) 
+echo 2. Reparar la imagen de Windows (DISM) 
+echo 3. Limpiar la imagen de Windows (DISM) 
+echo 4. Comprobar el estado de la imagen de Windows (DISM) 
+echo 5. Salir 
+echo ============================================ 
+set /p choice=Elige una opcion (1-5):
+
+if "%choice%"=="1" goto sfc 
+if "%choice%"=="2" goto dism_repair 
+if "%choice%"=="3" goto dism_cleanup 
+if "%choice%"=="4" goto dism_check 
+if "%choice%"=="5" goto end 
+goto menu
+
+:sfc 
+echo Ejecutando el Comprobador de Archivos de Sistema (SFC)... 
+sfc /scannow 
+pause 
+goto menu
+
+:dism_repair 
+echo Reparando la imagen de Windows... 
+dism /online /cleanup-image /restorehealth 
+pause 
+goto menu
+
+:dism_cleanup 
+echo Limpiando la imagen de Windows... 
+dism /online /cleanup-image /startcomponentcleanup 
+pause 
+goto menu
+
+:dism_check
+echo Comprobando el estado de la imagen de Windows... 
+dism /online /cleanup-image /checkhealth 
+pause 
+goto menu
+
+:end 
+echo Saliendo del menu de diagnostico. 
+endlocal 
+exit
