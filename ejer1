@@ -1,0 +1,32 @@
+@echo off
+rem Comprobar si se han pasado dos parámetros
+
+if "%1"=="" (
+  echo Error: Debes proporcionar dos números enteros
+  exit /b 1
+)
+
+if "%2"=="" ( 
+  echo Error: Debes proporcionar dos números enteros. 
+  exit /b 1 
+)
+
+rem Asignar los parámetros a variables 
+set num1=%1 
+set num2=%2
+rem Comprobar si el segundo número es cero
+
+if "%num2%"=="0" ( 
+  echo Error: No se puede dividir entre cero. 
+  exit /b 1 
+)
+
+rem Realizar la división y mostrar el resultado con tres decimales 
+set /a result=num1*1000/num2 
+set /a integer=result/1000 
+set /a decimal=result%%1000
+
+rem Formatear el resultado para mostrar tres decimales 
+if %decimal% lss 10 set decimal=00%decimal% 
+if %decimal% lss 100 set decimal=0%decimal%
+echo Resultado: %integer%.%decimal%
