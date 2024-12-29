@@ -1,0 +1,43 @@
+@echo off 
+setlocal enabledelayedexpansion
+
+rem Comprobar si se han pasado argumentos
+if "%1"=="" (
+  echo Error: Debes proporcionar una serie de números enteros. 
+  exit /b 1 
+)
+
+rem Inicializar variables 
+set sum=0 
+set count=0 
+set max=%1 
+set min=%1
+
+rem Calcular suma, máximo y mínimo 
+for %%i in (%*) do ( 
+  set /a sum+=%%i 
+  set /a count+=1 
+  if %%i gtr !max! set max=%%i 
+  if %%i lss !min! set min=%%i 
+)
+
+rem Calcular promedio 
+set /a avg=sum/count
+
+rem Calcular desviación estándar 
+set sumsq=0 
+for %%i in (%*) do ( 
+  set /a diff=%%i-avg 
+  set /a diff=diff*diff 
+  set /a sumsq+=diff 
+)
+set /a variance=sumsq/count 
+set /a stddev=sqrt(variance)
+
+rem Mostrar resultados 
+echo Promedio: %avg% 
+echo Valor máximo: %max% 
+echo Valor mínimo: %min% 
+echo Desviación estándar: %stddev% 
+endlocal 
+pause
